@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cv-pvc-pod 
+  labels:
+    app: cv
+spec:
+    containers:
+    - image: sanamughal1988/cvv
+      imagePullPolicy: IfNotPresent
+      name: cvv
+      volumeMounts:
+      - name: cvpv
+        mountPath: /var/docs 
+      ports:
+      - containerPort: 80
+    - image: nginx:1.7.9
+      name: ngnix  
+      volumeMounts:
+        - name: cvpv
+          mountPath: /usr/share/ngnix/html
+      ports:
+      - containerPort: 8443
+    volumes:
+    - name: cvpv     
+      persistentVolumeClaim:
+          claimName: cv-pvc    
